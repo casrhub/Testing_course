@@ -16,21 +16,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Verify Chrome Installation
-        run: |
-          which google-chrome || echo "Google Chrome not found!"
-          google-chrome --version || echo "Failed to fetch Chrome version!"
-          
-      - name: Install ChromeDriver matching Chrome version
-        run: |
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
-          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
-          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
-
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 120
+          install-dependencies: true
       - run: |
             cd src
             python3 -m http.server 8000 &
