@@ -16,10 +16,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: browser-actions/setup-chrome@v1
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 120
           install-dependencies: true
+
+      - name: Install ChromeDriver matching Chrome version
+        run: |
+          CHROME_VERSION=$(chromium-browser --version | awk '{print $2}')
+          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
+          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
+
       - run: |
             cd src
             python3 -m http.server 8000 &
