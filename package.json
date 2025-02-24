@@ -1,14 +1,13 @@
 {
   "name": "calculator",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "\"test for web application\"",
+  "main": "",
   "scripts": {
     "test": "mocha"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "mocha": "^11.1.0",
     "selenium-webdriver": "^4.28.1"
