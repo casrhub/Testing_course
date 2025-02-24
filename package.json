@@ -13,7 +13,6 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "chromedriver": "^133.0.1",
     "mocha": "^11.1.0",
     "selenium-webdriver": "^4.28.1"
   }
