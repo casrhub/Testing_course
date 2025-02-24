@@ -27,8 +27,8 @@ jobs:
             curl http://localhost:8000
             cd ..
             npm install
-            ./node_modules/.bin/mocha *.js
-            
+            ./node_modules/.bin/mocha "**/*.spec.js"
+          
       - uses: actions/upload-artifact@v4
         if: always()
         with:
