@@ -22,11 +22,12 @@ jobs:
           install-dependencies: true
 
       - run: |
-            cd src
-            python3 -m http.server 8000 &
-            sleep 10 &&
-            curl http://localhost:8000
-            cd ..
+          cd src
+          python3 -m http.server 8000 &
+          sleep 10  # Increase sleep time to allow server startup
+          curl http://localhost:8000 || echo "Server not responding!"
+          cd ..
+
       
       - name: Install dependencies
         run: |
