@@ -2,17 +2,14 @@
   "name": "calculator",
   "version": "1.0.0",
   "main": "index.js",
-  "directories": {
-    "test": "mocha 'tests/**/*.spec.js' --timeout 10000"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
+  "dependencies": {
     "mocha": "^11.1.0",
     "selenium-webdriver": "^4.28.1"
   }
