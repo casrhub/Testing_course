@@ -26,9 +26,10 @@ jobs:
             sleep 10 &&
             curl http://localhost:8000
             cd ..
+      - run: |
             cd tests
             npm install
-            ./node_modules/.bin/mocha *.js
+            npx mocha *.js  # Use npx to run mocha without relying on node_modules/.bin
             
       - uses: actions/upload-artifact@v4
         if: always()
