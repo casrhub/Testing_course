@@ -21,24 +21,35 @@ jobs:
           chrome-version: 120
           install-dependencies: true
 
-      - run: |
+      - name: Install ChromeDriver matching Chrome version
+        run: |
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
+          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
+
+      - name: Start the web server and wait
+        run: |
           cd src
           python3 -m http.server 8000 &
-          sleep 10  # Increase sleep time to allow server startup
-          curl http://localhost:8000 || echo "Server not responding!"
+          sleep 15  # Increase sleep time to ensure server startup
+          curl http://localhost:8000 || echo "Server is not responding!"
           cd ..
 
-      
-      - name: Install dependencies
+      - name: Install test dependencies
         run: |
-            cd tests
-            npm install
-            ls -la node_modules/.bin || echo "Mocha is missing"
+          cd tests
+          npm install
+          npx mocha --version || echo "Mocha is missing"
+          ls -la node_modules/.bin || echo "No bin directory found"
 
-      - name: Run tests with Mocha
+      - name: Run Selenium tests with Mocha
         run: |
-            cd tests
-            npx mocha *.js  # Using npx ensures Mocha is found even if it's missing in node_modules/.bin
+          cd tests
+          npx mocha *.js  # Using npx ensures Mocha runs correctly
 
       - uses: actions/upload-artifact@v4
         if: always()
