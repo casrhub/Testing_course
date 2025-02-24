@@ -26,7 +26,6 @@ jobs:
             sleep 10 &&
             curl http://localhost:8000
             cd ..
-            cd tests
             npm install
             ./node_modules/.bin/mocha *.js
             
