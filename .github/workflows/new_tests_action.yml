@@ -17,25 +17,30 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Google Chrome
+      - name: Install Dependencies
         run: |
           apt-get update
-          apt-get install -y wget curl unzip gnupg
+          apt-get install -y wget curl unzip gnupg libnss3 libgconf-2-4
+
+      - name: Install Google Chrome
+        run: |
           wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
           echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
           apt-get update
           apt-get install -y google-chrome-stable
-          google-chrome --version
+          google-chrome-stable --version
 
       - name: Install ChromeDriver matching Chrome version
         run: |
           CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
+          echo "Chrome version: $CHROME_VERSION"
           CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
+          echo "ChromeDriver version: $CHROMEDRIVER_VERSION"
           wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
           chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
+          /usr/local/bin/chromedriver --version
 
       - name: Start the web server and wait
         run: |
