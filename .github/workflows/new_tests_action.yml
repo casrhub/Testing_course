@@ -20,16 +20,25 @@ jobs:
         with:
           chrome-version: 120
           install-dependencies: true
+
       - run: |
             cd src
             python3 -m http.server 8000 &
             sleep 10 &&
             curl http://localhost:8000
             cd ..
+      
+      - name: Install dependencies
+        run: |
             cd tests
             npm install
-            ./node_modules/.bin/mocha *.js
-            
+            ls -la node_modules/.bin || echo "Mocha is missing"
+
+      - name: Run tests with Mocha
+        run: |
+            cd tests
+            npx mocha *.js  # Using npx ensures Mocha is found even if it's missing in node_modules/.bin
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
