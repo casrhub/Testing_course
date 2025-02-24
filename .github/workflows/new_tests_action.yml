@@ -16,15 +16,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 120
           install-dependencies: true
 
+      - name: Debug - Check Installed Chrome Version
+        run: |
+          which google-chrome || echo "Google Chrome not found"
+          google-chrome --version || echo "Cannot get Chrome version"
+
       - name: Install ChromeDriver matching Chrome version
         run: |
-          CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
           CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
           wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
