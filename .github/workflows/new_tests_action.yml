@@ -16,14 +16,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 120
-          install-dependencies: true
+
+      - name: Install Google Chrome
+        run: |
+          apt-get update
+          apt-get install -y wget curl unzip gnupg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
+          apt-get update
+          apt-get install -y google-chrome-stable
+          google-chrome --version
 
       - name: Install ChromeDriver matching Chrome version
         run: |
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
           CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
           wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
