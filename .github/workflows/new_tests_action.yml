@@ -16,23 +16,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install Chromium Manually
-        run: |
-          apt-get update
-          apt-get install -y chromium-browser
-          chromium-browser --version || echo "Chromium installation failed!"
-
-      - name: Install ChromeDriver matching Chromium version
-        run: |
-          CHROME_VERSION=$(chromium-browser --version | awk '{print $2}')
-          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
-          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
-
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 120
+          install-dependencies: true
       - run: |
             cd src
             python3 -m http.server 8000 &
@@ -41,7 +28,7 @@ jobs:
             cd ..
             cd tests
             npm install
-            npx mocha *.js
+            ./node_modules/.bin/mocha *.js
             
       - uses: actions/upload-artifact@v4
         if: always()
