@@ -17,18 +17,22 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Manually Install Google Chrome
+      - name: Manually Install Google Chrome & ChromeDriver
         run: |
           apt-get update
-          apt-get install -y wget gnupg
+          apt-get install -y wget curl unzip gnupg
+          
+          # Add Google Chrome repo
           wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
           echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
           apt-get update
+          
+          # Install Google Chrome
           apt-get install -y google-chrome-stable
-          google-chrome --version
+          command -v google-chrome || echo "Google Chrome installation failed!"
+          google-chrome --version || echo "Failed to fetch Chrome version!"
 
-      - name: Install ChromeDriver matching Chrome version
-        run: |
+          # Fetch the correct ChromeDriver version
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
           CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
           wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
