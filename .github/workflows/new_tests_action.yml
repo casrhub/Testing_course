@@ -1,79 +1,37 @@
 name: Run tests
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
-
+  
 jobs:
   test:
     name: Test
-
     runs-on: ubuntu-22.04
-
+    
     container:
       image: node:20
-
+      
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
+          node-version: '20'
+      - uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 120
           install-dependencies: true
-
-      - name: Install ChromeDriver matching installed Chrome version
-        run: |
-          CHROME_VERSION=$(chromium-browser --version | awk '{print $2}')
-          CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION%.*})
-          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
-
-
-      - name: Debug - Check directory structure
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Listing files:"
-          ls -la
-
-      - name: Start local server
-        run: |
-          if [ -d "src" ]; then
+      - run: |
             cd src
             python3 -m http.server 8000 &
-            sleep 10
+            sleep 10 &&
             curl http://localhost:8000
             cd ..
-          else
-            echo "Error: 'src' directory not found!"
-            exit 1
-          fi
-
-      - name: Run tests
-        run: |
-          if [ -d "tests" ]; then
             cd tests
             npm install
-            npx mocha *.js
-          else
-            echo "Error: 'tests' directory not found!"
-            exit 1
-          fi
-
-      - name: Upload artifacts (screenshots)
+            ./node_modules/.bin/mocha *.js
+            
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: screenshots/
