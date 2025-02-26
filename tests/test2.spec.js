@@ -3,7 +3,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const assert = require('assert');
 const fs = require('fs');
 
-describe('Subtraction Test (-5 - (-10))', function () {
+describe('Test 2', function () {
     this.timeout(30000);
     let driver;
     let vars;
@@ -32,7 +32,7 @@ describe('Subtraction Test (-5 - (-10))', function () {
         }
     });
 
-    it('Should correctly subtract -5 - (-10)', async function () {
+    it('Test 2', async function () {
         await driver.get("http://127.0.0.1:8000/index.html");
 
         // Enter first number (-5)
