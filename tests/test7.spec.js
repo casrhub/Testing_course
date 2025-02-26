@@ -3,7 +3,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const assert = require('assert');
 const fs = require('fs');
 
-describe('-1+-1', function () {
+describe('Test 7', function () {
     this.timeout(30000);
     let driver;
     let vars;

@@ -3,7 +3,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const assert = require('assert');
 const fs = require('fs');
 
-describe('Subtraction Test (5 - 3)', function () {
+describe('Test 4', function () {
     this.timeout(30000);
     let driver;
     let vars;
@@ -32,7 +32,7 @@ describe('Subtraction Test (5 - 3)', function () {
         }
     });
 
-    it('Should correctly subtract 5 - 3', async function () {
+    it('5 - 3, should display: 2 ', async function () {
         await driver.get("http://127.0.0.1:8000/index.html");
 
         // Enter first number (5)
@@ -43,7 +43,7 @@ describe('Subtraction Test (5 - 3)', function () {
         await driver.findElement(By.id("num2")).click();
         await driver.findElement(By.id("num2")).sendKeys("3");
 
-        // Click the subtraction button (assuming it's the second button)
+        // Click the subtraction button 
         await driver.findElement(By.css("button:nth-child(2)")).click();
 
         // Wait for the result to be updated

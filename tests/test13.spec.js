@@ -3,7 +3,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const assert = require('assert');
 const fs = require('fs');
 
-describe('Test 2', function () {
+describe('Test 13', function () {
     this.timeout(30000);
     let driver;
     let vars;
@@ -32,25 +32,12 @@ describe('Test 2', function () {
         }
     });
 
-    it('Test 2', async function () {
-        await driver.get("http://127.0.0.1:8000/index.html");
-
-        // Enter first number (-5)
-        await driver.findElement(By.id("num1")).click();
-        await driver.findElement(By.id("num1")).sendKeys("-5");
-
-        // Enter second number (-10)
-        await driver.findElement(By.id("num2")).click();
-        await driver.findElement(By.id("num2")).sendKeys("-10");
-
-        // Click the subtraction button (assuming it's the second button)
-        await driver.findElement(By.css("button:nth-child(2)")).click();
-
-        // Wait for the result to be updated
-        await driver.wait(until.elementLocated(By.id("result")), 5000);
-        const resultText = await driver.findElement(By.id("result")).getText();
-
-        // Validate that the result is correctly displayed as "Result: 5"
-        assert.strictEqual(resultText, "Result: 5");
-    });
-});
+  it('Test 13 ', async function() {
+    await driver.get("http://127.0.0.1:8000/index.html")
+    await driver.findElement(By.id("num1")).click()
+    await driver.findElement(By.id("num1")).sendKeys("1000000")
+    await driver.findElement(By.id("num2")).click()
+    await driver.findElement(By.id("num2")).sendKeys("5000000")
+    await driver.findElement(By.css("button:nth-child(1)")).click()
+  })
+})
